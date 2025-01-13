@@ -18,34 +18,35 @@
 using namespace mlir;
 using namespace llvm;
 
-int main(int argc, char ** argv) {
+int main(int argc, char **argv)
+{
   MLIRContext ctx;
 
   ctx.loadDialect<func::FuncDialect, arith::ArithDialect>();
 
-  // 创建 OpBuilder
+  // OpBuilder
   OpBuilder builder(&ctx);
   auto mod = builder.create<ModuleOp>(builder.getUnknownLoc());
 
-  // 设置插入点
+  // module level insertion point, we can insert top-level operations like functions
   builder.setInsertionPointToEnd(mod.getBody());
 
-  // 创建 func
+  // define func
   auto i32 = builder.getI32Type();
   auto funcType = builder.getFunctionType({i32, i32}, {i32});
   auto func = builder.create<func::FuncOp>(builder.getUnknownLoc(), "test", funcType);
 
-  // 添加基本块
+  // function entry
   auto entry = func.addEntryBlock();
   auto args = entry->getArguments();
 
-  // 设置插入点
+  // function levle insertion point
   builder.setInsertionPointToEnd(entry);
 
-  // 创建 arith.addi
+  // arith.addi
   auto addi = builder.create<arith::AddIOp>(builder.getUnknownLoc(), args[0], args[1]);
 
-  // 创建 func.return
+  // func.return
   builder.create<func::ReturnOp>(builder.getUnknownLoc(), ValueRange({addi}));
   mod->print(llvm::outs());
   return 0;

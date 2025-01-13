@@ -1,16 +1,17 @@
-#include "mlir/IR/AsmState.h"
-#include "mlir/IR/BuiltinOps.h"
-#include "mlir/IR/MLIRContext.h"
-#include "mlir/Parser/Parser.h"
-#include "mlir/Support/FileUtilities.h"
+#include "mlir/IR/AsmState.h"           // Function for assembly printig and parsing
+#include "mlir/IR/BuiltinOps.h"         //ModuleOp
+#include "mlir/IR/MLIRContext.h"        // Central data structure
+#include "mlir/Parser/Parser.h"         // parseSourceFile, parser for MLIR text
+#include "mlir/Support/FileUtilities.h" // MLIR file IO
 
-#include "mlir/Dialect/Func/IR/FuncOps.h"
-#include "mlir/Dialect/Arith/IR/Arith.h"
-#include "llvm/Support/raw_ostream.h"
+#include "mlir/Dialect/Func/IR/FuncOps.h" // Function dialect
+#include "mlir/Dialect/Arith/IR/Arith.h"  // Arithemetic dialect
+#include "llvm/Support/raw_ostream.h"     // LLVM's output stream
 
 using namespace mlir;
 
-int main(int argc, char ** argv) {
+int main(int argc, char **argv)
+{
   MLIRContext ctx;
   // 首先，注册需要的 dialect
   ctx.loadDialect<func::FuncDialect, arith::ArithDialect>();
